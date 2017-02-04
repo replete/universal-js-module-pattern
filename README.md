@@ -12,11 +12,13 @@
   else if (typeof module ==='object' && module.exports) module.exports=factory.apply(root,deps.map(function(_){return require(_.split(':')[0])}));
   else root[name]=factory.apply(root, deps.map(function(_){_=_.split(':');return eval(_[_.length-1?0:1])}));
 } (
-['otherModule', 'underscore:_', 'jQuery:$'], // <- Dependencies. If colon present, next substring used for browser global
+// Dependencies. If colon present, next substring used to find global object
+['otherModule', 'underscore:_', 'jQuery:$'],
 function(otherModule, _, jQuery) {
 
-  function constructor() {
+  // Write your module code here:
 
+  function constructor() {
 	var response = 'response from' + otherModule();
 
 	if (underscore.isUndefined(window.thing)) {
@@ -27,8 +29,8 @@ function(otherModule, _, jQuery) {
     return response;
   }
 
-  return constructor;
+  return constructor; // must return a function
  
-}, this, 'myModuleName')); // <-- Exported module name
+}, this, 'myModuleName')); // Exported module name
 
 ```
