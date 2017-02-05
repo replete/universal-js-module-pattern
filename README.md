@@ -7,29 +7,23 @@
 ## Example:
 
 ```javascript
-(function(deps, factory, root, name) {
+(function(deps, factory, root, global) {
   if (typeof define === 'function' && define.amd) define(deps,factory);
   else if (typeof module ==='object' && module.exports) module.exports=factory.apply(root,deps.map(function(_){return require(_.split(':')[0])}));
-  else root[name]=factory.apply(root, deps.map(function(_){_=_.split(':');return eval(_[_.length-1?0:1])}));
+  else root[global]=factory.apply(root,deps.map(function(_){_=_.split(':');return root[_[_.length-1]]}));
 } (
-// Dependencies. If colon present, next substring used to find global object
-['otherModule', 'underscore:_', 'jQuery:$'],
-function(otherModule, _, jQuery) {
-
-  // Write your module code here:
+['otherModule', 'underscore:_', 'jQuery:$'], // Dependencies. Optional browser global property name
+function(other, under, $) {
 
   function constructor() {
-	var response = 'response from' + otherModule();
-
-	if (underscore.isUndefined(window.thing)) {
-		$('body').append($('<div> thing! </div>'));
-	} else {
-		return false;
-	}
+    var response = 'response from' + other();
+    if (!under.isUndefined(window.thing)) {
+      $('body').append($('<div> thing! </div>'));
+    }
     return response;
   }
 
-  return constructor; // must return a function
+  return constructor;
  
 }, this, 'myModuleName')); // Exported module name
 
